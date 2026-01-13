@@ -20,7 +20,7 @@ export interface LiveCfg {
 
 interface ConfigFileStruct {
   cache_time?: number;
-  api_site?: {
+  _site?: {
     [key: string]: ApiSite;
   };
   custom_category?: {
@@ -285,6 +285,28 @@ async function getInitConfig(configFile: string, subConfig: {
       disabled: false,
     });
   });
+
+  // 添加默认API站点
+  if (!adminConfig.SourceConfig || adminConfig.SourceConfig.length === 0) {
+    adminConfig.SourceConfig = [
+      {
+        key: 'tmdb',
+        name: 'TMDB电影',
+        api: 'https://api.themoviedb.org/3/movie/popular?api_key=YOUR_ACTUAL_API_KEY&language=zh-CN',
+        detail: 'https://www.themoviedb.org',
+        from: 'default',
+        disabled: false,
+      },
+      {
+        key: 'douban',
+        name: '豆瓣电影',
+        api: 'https://movie.douban.com/j/search_subjects?type=movie&tag=热门&page_limit=50&page_start=0',
+        detail: 'https://movie.douban.com',
+        from: 'default',
+        disabled: false,
+      }
+    ];
+  }
 
   return adminConfig;
 }
